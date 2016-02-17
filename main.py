@@ -69,18 +69,12 @@ def search(query):
 
 
 def search_general(info):
-    provider.log.info(info)
     info["extra"] = settings.value.get("extra", "")  # add the extra information
     query = filters.type_filtering(info, '-')  # check type filter and set-up filters.title
     url_search = "%s/torrents/search/%s" % (settings.value["url_address"], query)
     provider.log.info(url_search)
     data = provider.GET(url_search, params={"limit" : 10}, headers={'Authorization': token}, data=None) 
-    provider.log.error("coucou1")
-    provider.log.error(data.json())
-    provider.log.error("coucou2")
     return extract_torrents(data.json())
-    #browser.open(url_search)
-    #return extract_torrents(browser.content)
 
 def search_movie(info):
     info["type"] = "movie"
