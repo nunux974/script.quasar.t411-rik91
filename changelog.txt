@@ -1,0 +1,2 @@
+v1.2.0 icon support
+v1.1.0 Quasar ready
