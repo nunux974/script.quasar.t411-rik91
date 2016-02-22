@@ -73,11 +73,14 @@ def search(query):
 
 
 def search_general(info):
+    category = {"movie": 631, "show": 210, "anime": 637}
     info["extra"] = settings.value.get("extra", "")  # add the extra information
+    if not "query_filter" in info:
+        info["query_filter"] = ""
     query = filters.type_filtering(info, '-')  # check type filter and set-up filters.title
-    url_search = "%s/torrents/search/%s" % (settings.value["url_address"], query)
+    url_search = "%s/torrents/search/%s&?limit=10&cid=%s%s" % (settings.value["url_address"], query, category[info["type"]], info["query_filter"])
     provider.log.info(url_search)
-    data = provider.GET(url_search, params={"limit" : 10}, headers={'Authorization': token}, data=None) 
+    data = provider.GET(url_search, params={}, headers={'Authorization': token}, data=None)
     return extract_torrents(data.json())
 
 def search_movie(info):
@@ -90,8 +93,24 @@ def search_movie(info):
 def search_episode(info):
     if info['absolute_number'] == 0:
         info["type"] = "show"
-        info["query"] = info['title'].encode('utf-8') + ' s%02de%02d' % (
-            info['season'], info['episode'])  # define query
+        info["query_filter"] = ""
+        if(info['season']):
+            if info['season'] < 25  or 27 < info['season'] < 31 :
+                real_s = int(info['season']) + 967
+            if info['season'] == 25 :
+                real_s = 994
+            if 25 < info['season'] < 28 :
+                real_s = int(info['season']) + 966
+            info["query_filter"] += '&term[45][]=%s' % real_s
+        if(info['episode']):
+            if info['episode'] < 9 :
+                real_ep = int(info['episode']) + 936
+            if 8 < info['episode'] < 31 :
+                real_ep = int(info['episode']) + 937
+            if 30 < info['episode'] < 61 :
+                real_ep = int(info['episode']) + 1057
+            info["query_filter"] += '&term[46][]=%s' % real_ep
+        info["query"] = info['title'].encode('utf-8')  # define query
     else:
         info["type"] = "anime"
         info["query"] = info['title'].encode('utf-8') + ' %02d' % info['absolute_number']  # define query anime
