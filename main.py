@@ -33,7 +33,11 @@ def extract_torrents(data):
         for link in links:
             name = link['name']  # name
             magnet = '%s/torrents/download/%s' % (settings.value["url_address"], link['id'])  # magnet
-            size = str(int(link['size'])/1000000) + " Mo"  # size
+            fsize = int(link['size'])/1000000 # size
+            if fsize > 1000:
+                size = "%0.2f Go" % (fsize/1000.00)
+            else:
+                size = "%0.2f Mo" % fsize
             seeds = link['seeders']  # seeds
             peers = link['leechers']  # peers
             # infohash
