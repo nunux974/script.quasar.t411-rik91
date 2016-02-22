@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.quasar.t411" name="Quasar MC's [COLOR FF0F559D]t411[/COLOR] Provider" version="1.2.0"
-       provider-name="mancuniancol">
+<addon id="script.quasar.t411" name="Quasar Rik91's [COLOR FF0F559D]t411[/COLOR] Provider" version="1.2.0"
+       provider-name="rik91">
     <requires>
         <import addon="xbmc.python" version="2.12.0"/>
         <import addon="plugin.video.quasar" optional="false"/>

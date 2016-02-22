@@ -1,5 +1,5 @@
 # coding: utf-8
-__author__ = 'mancuniancol'
+__author__ = 'rik91'
 
 import common
 import bencode, hashlib
