@@ -73,7 +73,7 @@ def search(query):
 
 
 def search_general(info):
-    category = {"movie": 631, "show": 210, "anime": 637, "general" : 210}
+    category = {"movie": 0, "show": 433, "anime": 637, "general" : 0}
     info["extra"] = settings.value.get("extra", "")  # add the extra information
     if not "query_filter" in info:
         info["query_filter"] = ""
