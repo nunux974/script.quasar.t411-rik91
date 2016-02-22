@@ -83,6 +83,7 @@ def search_general(info):
     data = provider.GET(url_search, params={}, headers={'Authorization': token}, data=None)
     return extract_torrents(data.json())
 
+
 def search_movie(info):
     info["type"] = "movie"
     query = common.translator(info['imdb_id'], 'fr', False)  # Just title
@@ -115,7 +116,8 @@ def search_episode(info):
         info["type"] = "anime"
         info["query"] = info['title'].encode('utf-8') + ' %02d' % info['absolute_number']  # define query anime
     return search_general(info)
-    
+
+
 def search_season(info):
     info["type"] = "show"
     info["query_filter"]= "&term[46][]=936"
@@ -126,7 +128,7 @@ def search_season(info):
             real_s = 994
         if 25 < info['season'] < 28 :
             real_s = int(info['season']) + 966
-        info["query_filter"] += '&term[45][]=%s' % real_s    
+        info["query_filter"] += '&term[45][]=%s' % real_s
     info["query"] = info['title'].encode('utf-8')  # define query
     return search_general(info)
 
