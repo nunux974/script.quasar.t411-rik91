@@ -73,7 +73,7 @@ def search(query):
 
 
 def search_general(info):
-    category = {"movie": 631, "show": 210, "anime": 637}
+    category = {"movie": 631, "show": 210, "anime": 637, "general" : 210}
     info["extra"] = settings.value.get("extra", "")  # add the extra information
     if not "query_filter" in info:
         info["query_filter"] = ""
@@ -115,10 +115,23 @@ def search_episode(info):
         info["type"] = "anime"
         info["query"] = info['title'].encode('utf-8') + ' %02d' % info['absolute_number']  # define query anime
     return search_general(info)
-
+    
+def search_season(info):
+    info["type"] = "show"
+    info["query_filter"]= "&term[46][]=936"
+    if(info['season']):
+        if info['season'] < 25  or 27 < info['season'] < 31 :
+            real_s = int(info['season']) + 967
+        if info['season'] == 25 :
+            real_s = 994
+        if 25 < info['season'] < 28 :
+            real_s = int(info['season']) + 966
+        info["query_filter"] += '&term[45][]=%s' % real_s    
+    info["query"] = info['title'].encode('utf-8')  # define query
+    return search_general(info)
 
 # This registers your module for use
-provider.register(search, search_movie, search_episode)
+provider.register(search, search_movie, search_episode, search_season)
 
 del settings
 del browser
