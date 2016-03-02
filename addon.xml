@@ -10,19 +10,19 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Quasar T411 Provider based on mancuniancol's works. Thanks for his great work.</summary>
-        <summary lang="fr">Provider T411 pour Quasar basé sur le travail de mancuniancol. Merci pour son super travail.</summary>
+        <summary lang="fr">Provider T411 pour Quasar basÃ© sur le travail de mancuniancol. Merci pour son super travail.</summary>
         <description lang="en">This provider allows to choose the quality of video torrent which will feed
             Quasar.[CR]You need to config the add-on before using Quasar[CR]It works with Movies and TV Shows
         </description>
-        <description lang="fr">Ce provider permet de choisir la qualité de la vidéo torrent qui va alimenter
-            Quasar. [CR] Vous devez config l'add-on avant d'utiliser Quasar [CR] Il fonctionne avec Films et Séries TV
+        <description lang="fr">Ce provider permet de choisir la qualitÃ© de la vidÃ©o torrent qui va alimenter
+            Quasar. [CR] Vous devez config l'add-on avant d'utiliser Quasar [CR] Il fonctionne avec Films et SÃ©ries TV
         </description>
         <language>fr</language>
         <platform>all</platform>
-        <website>https://github.com/rik91/script.quasar.t411</website>
+        <website>https://github.com/rik91/script.quasar.t411-rik91</website>
         <forum>https://forums.tvaddons.ag/addon-releases/31572-pulsar-providers-unofficial-pulsar-repo.html</forum>
         <disclaimer lang="en">Some parts of the files provided by this addon can be illegal in your country. </disclaimer>
-		<disclaimer lang="fr">Le téléchargement de certaines sources obtenues par cette extension peut être illégal dans votre pays selon les lois en vigueur.</disclaimer> 
+        <disclaimer lang="fr">Le tÃ©lÃ©chargement de certaines sources obtenues par cette extension peut Ãªtre illÃ©gal dans votre pays selon les lois en vigueur.</disclaimer> 
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     </extension>
 </addon>
