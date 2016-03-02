@@ -11,6 +11,16 @@ import xbmcgui
 
 from bs4 import BeautifulSoup
 
+season_names = {'en': 'season',
+                'es': 'temporada',
+                'fr': 'saison',
+                'nl': 'seizoen',
+                'ru': 'сезон',
+                'it': 'stagione',
+                'de': 'saison',
+                'pt': 'temporada',
+                }
+
 
 class Settings:
     def __init__(self):
@@ -53,10 +63,12 @@ class Browser:
 
         self._cookies = urllib.urlencode(payload)
 
-    def open(self, url='', language='en'):
+    def open(self, url='', language='en', payload={}):
         import urllib2
 
         result = True
+        if len(payload) > 0:
+            self.create_cookies(payload)
         if self._cookies is not None:
             req = urllib2.Request(url, self._cookies)
             self._cookies = None
@@ -267,8 +279,6 @@ class Filtering:
                         res2.append(False)
                 res1.append(all(res2))
             res = any(res1)
-            if self.info['type'] == 'show' and value == 'season':
-                res = True
         return res
 
     # validate size
@@ -416,7 +426,7 @@ def exception(title):
 def getlinks(page):
     browser = Browser()
     result = ""
-    if browser.open(page):
+    if browser.open(page.encode("UTF-8")):
         content = re.findall('magnet:\?[^\'"\s<>\[\]]+', browser.content)
         if content is not None:
             result = content[0]
