@@ -283,9 +283,11 @@ class Filtering:
 
     # validate size
     def size_clearance(self, size):
+        sfloat = ignore_exception(ValueError)(float)
         max_size1 = 100 if self.max_size == 10 else self.max_size
         res = False
-        value = float(re.split('\s', size.strip().replace(',', ''))[0])
+        # value = float(re.split('\s', size.strip().replace(',', ''))[0])
+        value = sfloat(size)
         value *= 0.001 if 'M' in size else 1
         if self.min_size <= value <= max_size1:
             res = True
