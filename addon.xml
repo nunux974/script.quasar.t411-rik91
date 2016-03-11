@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.quasar.t411-rik91" name="Quasar Rik91's [COLOR FF0F559D]t411[/COLOR] Provider" version="1.3.2"
+<addon id="script.quasar.t411-rik91" name="Quasar Rik91's [COLOR FF0F559D]t411[/COLOR] Provider" version="1.3.5"
        provider-name="mancuniancol,rik91">
     <requires>
         <import addon="xbmc.python" version="2.12.0"/>

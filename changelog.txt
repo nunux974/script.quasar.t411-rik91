@@ -1,3 +1,4 @@
+v1.3.5 adding selector between episodes or seasons
 v1.3.2 Synchro Common mancunanciol + Multithreaded version
 v1.3.1 Synchro mancunanciol + update domaine .ch
 v1.3.0 search complete season support
