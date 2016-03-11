@@ -3,6 +3,8 @@ __author__ = 'rik91'
 
 import common
 import bencode, hashlib
+import Queue
+from threading import Thread
 from bs4 import BeautifulSoup
 from quasar import provider
 
@@ -26,6 +28,8 @@ except:
 def extract_torrents(data):
     sint = common.ignore_exception(ValueError)(int)
     results = []
+    threads = []
+    q = Queue.Queue()
     cont = 0
     if data is not None:
         filters.information()  # print filters settings
@@ -40,31 +44,38 @@ def extract_torrents(data):
                 size = "%0.2f Mo" % fsize
             seeds = link['seeders']  # seeds
             peers = link['leechers']  # peers
-            # infohash
-            metainfo = bencode.bdecode(provider.GET(magnet, params={}, headers={'Authorization': token}, data=None).data)
-            info_hash = hashlib.sha1(bencode.bencode(metainfo['info'])).hexdigest()
-            trackers = [metainfo["announce"]]
             if filters.verify(name, size):
                 cont += 1
-                results.append({"name": name.strip(),
-                                "uri": magnet,
-                                "info_hash": info_hash,
-                                "is_private" : True,
-                                "trackers" : trackers,
-                                "size": size.strip(),
-                                "seeds": sint(seeds),
-                                "peers": sint(peers),
-                                "language": settings.value.get("language", "fr"),
-                                "provider": settings.name,
-                                "icon": settings.icon,
-                                })  # return the torrent
+                result = {"name": name.strip(),
+                          "uri": magnet,
+                          "size": size.strip(),
+                          "seeds": sint(seeds),
+                          "peers": sint(peers),
+                          "language": settings.value.get("language", "fr"),
+                          "provider": settings.name,
+                          "icon": settings.icon,
+                         }
+                thread = Thread(target=torrent2magnet, args = (result, q))
+                thread.start()
+                threads.append(thread)
                 if cont >= int(settings.value.get("max_magnets", 10)):  # limit magnets
                     break
             else:
                 provider.log.warning(filters.reason)
+
+        for thread in threads :
+            thread.join()
+        while not q.empty():
+            results.append(q.get())
     provider.log.info('>>>>>>' + str(cont) + ' torrents sent to Quasar<<<<<<<')
     return results
 
+def torrent2magnet(result, q):
+    metainfo = bencode.bdecode(provider.GET(result["uri"], params={}, headers={'Authorization': token}, data=None).data)
+    result["info_hash"] = hashlib.sha1(bencode.bencode(metainfo['info'])).hexdigest()
+    result["trackers"] = [metainfo["announce"]]
+    result["is_private"] = True
+    q.put(result)
 
 def search(query):
     info = {"query": query,
@@ -78,7 +89,7 @@ def search_general(info):
     if not "query_filter" in info:
         info["query_filter"] = ""
     query = filters.type_filtering(info, '-')  # check type filter and set-up filters.title
-    url_search = "%s/torrents/search/%s&?limit=10&cid=%s%s" % (settings.value["url_address"], query, category[info["type"]], info["query_filter"])
+    url_search = "%s/torrents/search/%s&?limit=100&cid=%s%s" % (settings.value["url_address"], query, category[info["type"]], info["query_filter"])
     provider.log.info(url_search)
     data = provider.GET(url_search, params={}, headers={'Authorization': token}, data=None)
     return extract_torrents(data.json())
@@ -96,21 +107,9 @@ def search_episode(info):
         info["type"] = "show"
         info["query_filter"] = ""
         if(info['season']):
-            if info['season'] < 25  or 27 < info['season'] < 31 :
-                real_s = int(info['season']) + 967
-            if info['season'] == 25 :
-                real_s = 994
-            if 25 < info['season'] < 28 :
-                real_s = int(info['season']) + 966
-            info["query_filter"] += '&term[45][]=%s' % real_s
+            info["query_filter"] += '&term[45][]=%s' % mappingSeasonCode(info)
         if(info['episode']):
-            if info['episode'] < 9 :
-                real_ep = int(info['episode']) + 936
-            if 8 < info['episode'] < 31 :
-                real_ep = int(info['episode']) + 937
-            if 30 < info['episode'] < 61 :
-                real_ep = int(info['episode']) + 1057
-            info["query_filter"] += '&term[46][]=%s' % real_ep
+            info["query_filter"] += '&term[46][]=%s' % mappingEpisodeCode(info)
         info["query"] = info['title'].encode('utf-8')  # define query
     else:
         info["type"] = "anime"
@@ -122,15 +121,29 @@ def search_season(info):
     info["type"] = "show"
     info["query_filter"]= "&term[46][]=936"
     if(info['season']):
-        if info['season'] < 25  or 27 < info['season'] < 31 :
-            real_s = int(info['season']) + 967
-        if info['season'] == 25 :
-            real_s = 994
-        if 25 < info['season'] < 28 :
-            real_s = int(info['season']) + 966
-        info["query_filter"] += '&term[45][]=%s' % real_s
+        info["query_filter"] += '&term[45][]=%s' % mappingSeasonCode(info)
     info["query"] = info['title'].encode('utf-8')  # define query
     return search_general(info)
+
+
+def mappingSeasonCode(info):
+    if info['season'] < 25  or 27 < info['season'] < 31 :
+        real_s = int(info['season']) + 967
+    if info['season'] == 25 :
+        real_s = 994
+    if 25 < info['season'] < 28 :
+        real_s = int(info['season']) + 966
+    return real_s
+
+
+def mappingEpisodeCode(info):
+    if info['episode'] < 9 :
+        real_ep = int(info['episode']) + 936
+    if 8 < info['episode'] < 31 :
+        real_ep = int(info['episode']) + 937
+    if 30 < info['episode'] < 61 :
+        real_ep = int(info['episode']) + 1057
+    return real_ep
 
 # This registers your module for use
 provider.register(search, search_movie, search_episode, search_season)
