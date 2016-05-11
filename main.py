@@ -2,6 +2,7 @@
 __author__ = 'rik91'
 
 import common
+import re, string, unicodedata
 import bencode, hashlib
 import Queue
 from threading import Thread
@@ -88,11 +89,22 @@ def search_general(info):
     info["extra"] = settings.value.get("extra", "")  # add the extra information
     if not "query_filter" in info:
         info["query_filter"] = ""
-    query = filters.type_filtering(info, '-')  # check type filter and set-up filters.title
+    info["query"] = cleanQuery(info["query"])
+    query = filters.type_filtering(info, '+')  # check type filter and set-up filters.title
     url_search = "%s/torrents/search/%s&?limit=100&cid=%s%s" % (settings.value["url_address"], query, category[info["type"]], info["query_filter"])
     provider.log.info(url_search)
     data = provider.GET(url_search, params={}, headers={'Authorization': token}, data=None)
     return extract_torrents(data.json())
+
+
+def cleanQuery(query):
+    import types
+    #Suppression de la ponctuation
+    regex = re.compile("[%s]" % re.escape(string.punctuation + u"’…"))
+    query = regex.sub(" ", query)
+    #Suppression des accents
+    query = ''.join((c for c in unicodedata.normalize('NFD', query.decode('utf-8')) if unicodedata.category(c) != 'Mn'))
+    return query
 
 
 def search_movie(info):
