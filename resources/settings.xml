@@ -5,7 +5,7 @@
         <setting label="32092" type="text" id="password" option="hidden" enable="!eq(-1,)" default=""/>
     </category>
     <category label="32050">
-        <setting label="32093" type="text" id="url_address" default="http://api.t411.ch"/>
+        <setting label="32093" type="text" id="url_address" default="http://api.t411.li"/>
         <!--<setting label="32199" type="lsep"/>
         <setting label="32151" type="labelenum" id="language" values="en|de|es|fr|it|pt" default="en"/>-->
         <setting label="32200" type="lsep"/>
