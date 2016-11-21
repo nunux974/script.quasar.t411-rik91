@@ -1,3 +1,4 @@
+v1.3.6b update domain .li
 v1.3.6 cleaning query for better results
 v1.3.5 adding selector between episodes or seasons
 v1.3.2 Synchro Common mancunanciol + Multithreaded version
