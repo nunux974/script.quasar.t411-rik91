@@ -41,7 +41,7 @@ msgstr "Temps (secondes):"
 #: settings.xml:20
 msgctxt "#32062"
 msgid "Movies Filters"
-msgstr "Filtrage Films"
+msgstr "Filtres Films"
 
 #: settings.xml:21 settings.xml:43
 msgctxt "#32063"
@@ -66,7 +66,7 @@ msgstr "Facile de configuration avec Mots-clés après la requête"
 #: settings.xml:42
 msgctxt "#32070"
 msgid "TV Filters"
-msgstr "Filtrage Émission Télévision"
+msgstr "Filtres Série TV"
 
 #: setting.xml
 msgctxt "#32090"
@@ -140,5 +140,5 @@ msgstr "Taille Maximum en GB (0 = Pas de Filtre):"
 
 #: settings.xml:13
 msgctxt "#32212"
-msgid "Search seasons, instead of episodes:"
-msgstr "Rechercher saisons, au lieu des épisodes:"
+msgid "Search for season or episode:"
+msgstr "Rechercher par saison ou par épisode:"

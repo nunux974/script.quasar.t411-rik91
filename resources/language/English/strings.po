@@ -140,5 +140,5 @@ msgstr ""
 
 #: settings.xml:13
 msgctxt "#32212"
-msgid "Search seasons, instead of episodes:"
+msgid "Search for season or episode:"
 msgstr ""

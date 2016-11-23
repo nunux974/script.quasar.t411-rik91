@@ -22,7 +22,7 @@ password = provider.ADDON.getSetting('password')  # passsword
 resp_login = provider.POST('%s/auth' % settings.value["url_address"], params={}, headers={}, data='username=' + username + '&password=' + password)
 try:
     token = resp_login.json()['token']
-    provider.log.info('token : %s' % token)
+    #provider.log.info('token : %s' % token)
 except:
     provider.notify(message=resp_login.json()['error'], header=None, time=5000, image='')
 
@@ -137,6 +137,10 @@ def search_season(info):
     info["query"] = info['title'].encode('utf-8')  # define query
     return search_general(info)
 
+def search_episode_season(info):
+    episodes = search_episode(info)
+    seasons = search_season(info)
+    return episodes + seasons
 
 def mappingSeasonCode(info):
     if info['season'] < 25  or 27 < info['season'] < 31 :
@@ -158,11 +162,15 @@ def mappingEpisodeCode(info):
     return real_ep
 
 # This registers your module for use
-if "false" == settings.value.get("episodes", "false"):
+if "Episode" == settings.value.get("episode", "Episode"):
     provider.register(search, search_movie, search_episode, search_season)
-else:
-    provider.register(search, search_movie, search_season, search_season)
 
+if "Season" == settings.value.get("episode", "Episode"):
+        provider.register(search, search_movie, search_season, search_season)
+        
+if "Both" == settings.value.get("episode", "Episode"):
+        provider.register(search, search_movie, search_episode_season, search_season)
+        
 del settings
 del browser
 del filters
